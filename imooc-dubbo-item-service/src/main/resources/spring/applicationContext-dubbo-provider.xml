@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+		
+	<!-- 为当前服务提供者取个名字，并且提供给注册中心 -->
+	<dubbo:application name="imooc-dubbo-item-service"></dubbo:application>
+	
+	<!-- 注册中心的配置，使用zk暴露服务 -->
+	<!--我的zookeeper在虚拟机上ip是：192.168.133.129，客户端连接服务器的端口默认为2181-->
+	<dubbo:registry protocol="zookeeper" address="localhost:2181"></dubbo:registry>
+	
+	<!-- 定义暴露服务的端口号 -->
+	<!-- port 本机要把该服务在哪个端口暴露-->
+	<dubbo:protocol name="dubbo" port="20882"></dubbo:protocol>
+	
+	<!-- 暴露具体的服务接口 -->
+	<!-- retries 项目启动，dubbo注册进zookeeper的重试次数-->
+	<!-- interface暴露的接口-->
+	<!-- interface暴露的接口对应的实现类@Service("itemsService")-->
+	<dubbo:service retries="3" interface="com.imooc.item.service.ItemsService"
+		ref="itemsService"></dubbo:service>
+
+	<!--监控服务的注册-->
+	<dubbo:monitor protocol="registry"></dubbo:monitor>
+</beans>
